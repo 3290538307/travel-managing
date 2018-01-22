@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.MreplyDao">
+  <select id="getBylyjy_id" parameterType="int" resultType="com.etc.pojo.Mreply">
+  	 	SELECT comment_lyjy.*,user_info.name username
+			FROM comment_lyjy,user_info
+		WHERE comment_lyjy.uid=user_info.id and comment_lyjy.lyjy_id=#{id} order by time desc
+		limit #{start},#{end}
+  </select>
+  <insert id="insertMreply">
+  insert into comment_lyjy(lyjy_id,uid,content,time) values(#{lyjy_id},#{uid},#{content},#{time})
+  </insert>
+  <select id="countBylyjy_id" parameterType="int" resultType="int">
+  	select count(*) from comment_lyjy where lyjy_id=#{id}
+  </select>
+  </mapper>

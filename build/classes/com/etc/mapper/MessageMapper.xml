@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.MessageDao">
+  	<select id="getMessages" resultType="com.etc.pojo.Message">
+  		SELECT t1.name,t2.id,t2.from_id,t2.content,t2.time,t1.imagepath
+		from user_info t1,message t2
+		where t1.id=t2.from_id and t2.to_id=#{uid} ORDER BY time desc limit #{start},#{end}
+  	</select>
+  	<select id="countMessage" parameterType="int" resultType="int">
+  		select count(*)
+  		from user_info t1,message t2
+		where t1.id=t2.from_id and t2.to_id=#{uid}
+  	</select>
+  	<insert id="insertMessage" parameterType="com.etc.pojo.Message">
+  		insert into message(from_id,to_id,content,time) values(#{from_id},#{to_id},#{content},#{time})
+  	</insert>
+  	<delete id="deleteMessage" parameterType="int">
+  		delete from message where id=#{id}
+  	</delete>
+  </mapper>

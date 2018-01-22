@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    
+    <!-- 指定映射器路径 -->
+    <mappers>
+        <mapper resource="com/etc/mapper/UserMapper.xml" />
+        <mapper resource="com/etc/mapper/NoticeMapper.xml" />
+        <mapper resource="com/etc/mapper/MemoryMapper.xml" />
+        <mapper resource="com/etc/mapper/ZoneMapper.xml" />
+        <mapper resource="com/etc/mapper/JbyMapper.xml" />
+        <mapper resource="com/etc/mapper/ReplyMapper.xml" />
+        <mapper resource="com/etc/mapper/SpotStrategyMapper.xml" />
+
+        <mapper resource="com/etc/mapper/AdminMapper.xml" />
+
+        <mapper resource="com/etc/mapper/MreplyMapper.xml" />
+		<mapper resource="com/etc/mapper/MessageMapper.xml" />
+        <mapper resource="com/etc/mapper/NewstrategyMapper.xml" /> 
+
+    </mappers>
+</configuration>

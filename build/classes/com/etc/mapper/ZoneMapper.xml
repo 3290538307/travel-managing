@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.etc.dao.ZoneDao">
+		<select id="getZoneByUid" parameterType="int" resultType="com.etc.pojo.Zone">
+			SELECT * FROM zone
+			WHERE uid=#{uid} order by time desc LIMIT #{start},#{end} 
+		</select>
+		<select id="getMyZoneCount" parameterType="int" resultType="int">
+			select COUNT(*) FROM zone WHERE uid=#{uid} GROUP BY uid;
+		</select>
+		<select id="deleteMyZoneById" parameterType="int" >
+			delete from zone where id=#{id}
+		</select>
+		<insert id="insertZone">
+			insert into zone(uid,time,content) values(#{uid},#{time},#{content})
+		</insert>
+		<select id="getFriendZones" parameterType="int" resultType="com.etc.pojo.Zone">
+			SELECT t3.id, t1.name,t1.imagepath,t3.content,t3.time,t3.uid
+			FROM user_info t1,zone t3
+			WHERE t1.id=t3.uid AND (t3.uid in (SELECT user1 FROM friend WHERE user2=#{uid} and state=1) 
+			or t3.uid in (SELECT user2 FROM friend WHERE user1=#{uid} and state=1))
+			order by time desc limit #{start},#{end};
+		</select>
+		<select id="countFriendZones" parameterType="int" resultType="Integer" >
+			select count(*)
+			FROM user_info t1,zone t3
+			WHERE t1.id=t3.uid AND (t3.uid in (SELECT user1 FROM friend WHERE user2=#{uid} and state=1) 
+			or t3.uid in (SELECT user2 FROM friend WHERE user1=#{uid} and state=1))
+			order by time desc;
+		</select>
+		<select id="getZoneById" parameterType="int" resultType="com.etc.pojo.Zone">
+			select zone.*,t1.name from zone,user_info t1 where zone.id=#{id} and zone.uid=t1.id
+		</select>
+	</mapper>

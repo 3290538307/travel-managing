@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.AdminDao">
+	  <select id="getAdmin" parameterType="String" resultType="com.etc.pojo.Admin">
+	  	select * from admin_info where name=#{name} 
+	  </select>
+	  <insert id="AddAdmin" parameterType="com.etc.pojo.Admin" useGeneratedKeys="true" keyProperty="id">
+	  	insert into admin_info(name,password)  values(#{name},#{password})
+	  </insert>
+	  <select id="getAdminAll" resultType="com.etc.pojo.Admin">
+	  	select * from admin_info;
+	  </select>
+  </mapper>

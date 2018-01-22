@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.MemoryDao">
+  	<select id="getByKind" parameterType="int" resultType="com.etc.pojo.Memory">
+  		select * from lyjy where kind=#{kind} 
+  	</select>
+  	<select id="getDetailById" parameterType="int" resultType="com.etc.pojo.Memory">
+  		SELECT lyjy.*,user_info.`name`
+		FROM lyjy,user_info
+		where lyjy.uid=user_info.id and lyjy.id=#{id} 
+  	</select>
+  	<select id="getKindCount" resultType="com.etc.pojo.MemoryKindCount">
+  		SELECT kind,COUNT(*) count
+		FROM lyjy
+		GROUP BY kind
+  	</select>
+  	<select id="getByIndex" resultType="com.etc.pojo.Memory">
+  		SELECT lyjy.*,user_info.`name`
+		FROM lyjy,user_info
+		WHERE lyjy.uid=user_info.id AND lyjy.kind=#{kind} LIMIT #{start},#{end}
+  	</select>
+  	<select id="getCountByKind" parameterType="int" resultType="int">
+  		SELECT COUNT(*) count
+		FROM lyjy
+		WHERE kind=#{kind}
+		GROUP BY kind
+  	</select>
+  	<insert id="insertMemory" parameterType="com.etc.pojo.Memory">
+  		insert into lyjy(title,uid,content,cdate,path1,kind) values(#{title},#{uid},#{content},#{cdate},#{path1},#{kind})
+  	</insert>
+  	<select id="getByUid" parameterType="int" resultType="com.etc.pojo.Memory">
+  		select id,title,kind,cdate,path1 from lyjy where uid=#{uid} order by id desc 
+  		LIMIT #{start},#{end}
+  	</select>
+  	<select id="getCountByUid" parameterType="int" resultType="int">
+  		SELECT COUNT(*) count
+		FROM lyjy
+		WHERE uid=#{uid}
+		GROUP BY uid
+  	</select>
+  	<select id="deleteById" parameterType="int">
+  		delete from lyjy where id=#{id}
+  	</select>
+  	<select id="deleteMemory" parameterType="int">
+  		DELETE FROM comment_lyjy WHERE lyjy_id=#{id}
+  	</select>
+  	<select id="getAll"  resultType="com.etc.pojo.Memory">
+  		SELECT lyjy.id,lyjy.title,lyjy.cdate,user_info.`name`
+		from lyjy,user_info
+		WHERE lyjy.uid=user_info.id 	
+	</select>
+  	<select id="getLyjyById" parameterType="int" resultType="com.etc.pojo.Memory">
+  		select * from lyjy where id=#{id}
+  	</select>
+  </mapper>

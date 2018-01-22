@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.UserInfoDao">
+	  <select id="getPojo" parameterType="String" resultType="com.etc.pojo.UserInfo">
+	  	select * from user_info where name=#{name} or email=#{name}
+	  </select>
+	  <insert id="insertPojo" parameterType="com.etc.pojo.UserInfo" useGeneratedKeys="true" keyProperty="id">
+	  	insert into user_info(name,password,email)  values(#{name},#{password},#{email})
+	  </insert>
+	  <update id="updatePojo" >
+	  	update user_info set password=#{password} where name=#{name}
+	  </update>
+	  <update id="updatePwd">
+	  	update user_info set password=#{password} where id=#{uid}
+	  </update>
+	  <select id="getALL" resultType="com.etc.pojo.UserInfo">
+	  	select * from user_info;
+	  </select>
+	  <select id="getUserDetailById" parameterType="String" resultType="com.etc.pojo.UserInfoDetail">
+	  	SELECT t1.id,t1.name,t1.email,t1.birthday,t1.qq,t1.phone,t1.hobby,t1.introduce,
+		t1.address,t1.ldate,t1.sex,t1.password,
+		IFNULL(t2.cou,0) jbyCount,IFNULL(t3.cou,0) memoryCount
+		FROM user_info t1 
+		
+		LEFT JOIN
+		(SELECT uid,COUNT(*) cou FROM jby
+		WHERE state=1 or state=2
+		GROUP BY uid) t2
+		on t1.id=t2.uid
+		
+		LEFT JOIN
+		(SELECT uid,COUNT(*) cou FROM lyjy
+		GROUP BY uid) t3
+		on t1.id=t3.uid
+		WHERE id =#{id}
+	  </select>
+	  <update id="updateUser" parameterType="com.etc.pojo.UserInfoDetail">
+	  		update user_info set sex=#{sex},birthday=#{birthday},address=#{address},qq=#{qq},phone=#{phone},
+	  		hobby=#{hobby},introduce=#{introduce} where id=#{id}
+	  </update>
+	  <select id="getImg" parameterType="int" resultType="String">
+	  	select imagepath from user_info where id=#{id}
+	  </select>
+	  <update id="updateImg" >
+	  	update user_info set imagepath=#{img} where id=#{uid}
+	  </update>
+	  <select id="getFriends" parameterType="int" resultType="com.etc.pojo.UserInfoDetail">
+	  	SELECT t1.id,t1.`name`,t1.sex,t1.address,t1.birthday,t1.qq,t1.phone,t1.imagepath
+		from user_info t1
+		where t1.id in (SELECT user2 FROM friend where user1=#{uid} and state=1) 
+		or t1.id in(SELECT user1 FROM friend where user2=#{uid} and state=1) order by t1.id desc limit #{start},#{end}
+	  </select>
+	  <select id="countFriends" parameterType="int" resultType="int">
+	  	select count(*) from user_info t1
+	  	where t1.id in (SELECT user1 FROM friend where user2=#{uid} and state=1)
+	  	or t1.id in(SELECT user2 FROM friend where user1=#{uid} and state=1)
+	  </select>
+	  <delete id="deleteFriend" >
+	  	DELETE FROM friend WHERE (user1=#{uid} AND user2=#{f_id})
+		or (user1=#{f_id} AND user2=#{uid})
+	  </delete>
+	  <select id="isFriend" resultType="int">
+	  	SELECT count(*) FROM friend WHERE (user1=#{uid} AND user2=#{xid} and state=1) 
+	  	or (user1=#{xid} AND user2=#{uid} and state=1);
+	  </select>
+	  <select id="getOthers" parameterType="int" resultType="com.etc.pojo.UserInfoDetail">
+	  	SELECT t1.id,t1.`name`,t1.sex,t1.address,t1.birthday,t1.qq,t1.phone,t1.imagepath
+		from user_info t1
+		where t1.id not in (SELECT user2 FROM friend where user1=#{uid} ) 
+		and t1.id not in(SELECT user1 FROM friend where user2=#{uid}) and t1.id !=#{uid} limit #{start},#{end};
+	  </select>
+	  <insert id="applyFriend" >
+	  	insert into friend(user1,user2,state,time) values(#{uid},#{fid},0,#{time});
+	  </insert>
+	  <select id="getApplyFriends" resultType="com.etc.pojo.ApplyFriend">
+	  	SELECT t1.id,t1.name,t1.imagepath,t2.time
+		FROM user_info t1,friend t2
+		where t1.id=t2.user1 and t2.state=0 and t1.id in (SELECT user1 from friend where user2=#{uid})
+		order by time desc limit #{start},#{end}
+	  </select>
+	  <select id="countApplyFriends" parameterType="int" resultType="int">
+	  	select count(*)
+	  	FROM user_info t1,friend t2
+		where t1.id=t2.user1 and t2.state=0 and t1.id in (SELECT user1 from friend where user2=#{uid});
+	  </select>
+	  <update id="updateFriend">
+	  	update friend set state=1 where user1=#{fid} and user2=#{uid}
+	  </update>
+	  <select id="isSend" resultType="Integer">
+	  	select state from friend where user2=#{uid} and user1=#{fid}
+	  </select>
+  </mapper>

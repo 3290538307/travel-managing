@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.ReplyDao">
+  	<select id="getByZoneId" parameterType="int" resultType="com.etc.pojo.Reply">
+  		SELECT t2.id,t2.uid,t1.name,t1.imagepath,t2.time,t2.reply
+		FROM user_info t1,reply t2
+		WHERE t1.id=t2.uid AND t2.zone_id=#{zoneId} order by t2.time desc limit #{start},#{end}
+  	</select>
+  	<select id="countByZoneId" parameterType="int" resultType="int">
+  		select count(*)
+  		FROM user_info t1,reply t2
+		WHERE t1.id=t2.uid AND t2.zone_id=#{zoneId}
+  	</select>
+  	<insert id="insertReply" parameterType="com.etc.pojo.Reply">
+  		insert into reply(zone_id,reply,time,uid) values(#{zone_id},#{reply},#{time},#{uid})
+  	</insert>
+  	<delete id="deleteReply" parameterType="int">
+  		delete from reply where zone_id=#{zoneId}
+  	</delete>
+  </mapper>

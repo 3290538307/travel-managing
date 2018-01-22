@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.JbyDao">
+  	<insert id="insertJby" parameterType="com.etc.pojo.Jby">
+  		insert into Jby(title,uid,fromdate,state,content,todate,cdate,dest)
+  		values(#{title},#{uid},#{fromdate},#{state},#{content},#{todate},#{cdate},#{dest})
+  	</insert>
+  	<select id="JbyCountByUid" parameterType="int" resultType="int">
+  		select count(*) from jby
+  		where uid=#{uid}
+  		group by uid
+  	</select>
+  	<select id="getByUid" parameterType="int" resultType="com.etc.pojo.Jby">
+  		select id,fromdate,todate,title,dest,cdate
+  		from jby
+  		where uid=#{uid}
+  		order by id desc
+  		limit #{start},#{end}
+  	</select>
+  	<delete id="deleteById" parameterType="int">
+  		delete from jby
+  		where id=#{id}
+  	</delete>
+  	 <select id="getTravel" resultType="com.etc.pojo.Jby">
+	  	SELECT user_info.`name`,jby.id,jby.title,jby.uid,jby.fromdate,jby.content,jby.state,
+	    jby.todate,jby.cdate,jby.dest
+		FROM user_info ,jby
+		WHERE user_info.id = jby.uid order by id desc limit #{start},#{end}
+	  </select>
+	  <select id="getTravelDetailBydest" parameterType="String" resultType="com.etc.pojo.Jby">
+			SELECT jby.title,jby.fromdate,jby.state,jby.content,jby.todate,
+			 		jby.cdate,jby.dest,user_info.`name`
+			FROM
+					jby ,user_info
+			WHERE
+					jby.uid = user_info.id AND jby.dest = #{dest}
+			GROUP BY
+					user_info.id
+	  </select>
+	  <select id="getTravelDetailById" parameterType="int" resultType="com.etc.pojo.Jby">
+	  	SELECT user_info.`name`,jby.title,jby.dest,jby.fromdate,jby.todate,user_info.phone,jby.content,
+	  	 		jby.cdate
+        FROM
+				user_info ,jby
+		WHERE
+				user_info.id = jby.uid AND jby.id=#{id};
+
+	  </select>
+	  <select id="countTravelALL" resultType="int">
+	  	select count(*) from jby
+	  </select>
+	  <select id="getTravelALL" resultType="com.etc.pojo.Jby">
+	  	SELECT user_info.`name`,jby.id,jby.title,jby.uid,jby.fromdate,jby.content,jby.state,
+	    jby.todate,jby.cdate,jby.dest
+		FROM user_info ,jby
+		WHERE user_info.id = jby.uid order by id desc 
+	  </select>
+  </mapper>

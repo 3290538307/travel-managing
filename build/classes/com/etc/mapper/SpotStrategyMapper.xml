@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.SpotStrategyDao">
+   	   <select id="getALL" resultType="com.etc.pojo.SpotStrategyInfo">
+	  	select * from newstrategy;
+	  	 </select>
+	  	  <select id="getStrategyDetailById" parameterType="String" resultType="com.etc.pojo.SpotStrategyInfo">
+	  	 SELECT t1.id,t1.title,t1.content,t1.notice,t1.equipment,t1.people,t1.spot,
+		t1.triptime,t1.triptype,t1.imgpath,t1.summary
+		FROM newstrategy t1 
+		WHERE id=#{id}
+	  	 </select>
+	  	 <select id="getSeason" resultType="com.etc.pojo.SpotStrategyInfo">
+	  	SELECT * 
+    	FROM newstrategy t1
+		WHERE t1.triptype='时令游'
+	  	 </select>
+	  	 <select id="getTheme" resultType="com.etc.pojo.SpotStrategyInfo">
+	  	SELECT * 
+    	FROM newstrategy t1
+		WHERE t1.triptype='主题游'
+	  	 </select>
+	  	 
+	</mapper>

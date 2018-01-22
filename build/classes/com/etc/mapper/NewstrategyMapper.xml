@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.NewstrategyDao">
+  <select id="getStratelist"  resultType="com.etc.pojo.Newstrategypojo">
+  	SELECT t1.uid uid,t1.title title,t1.cdate cdate,t2.name  name,t1.id
+		FROM newstrategy t1 , admin_info t2
+	WHERE t1.uid=t2.id
+  </select>
+  <insert id="insertNews">
+  insert into newstrategy(uid,title,triptime,people,imgpath,triptype,content,equipment,notice,summary,spot,cdate) 
+  values(#{uid},#{title},#{triptime},#{people},#{imgpath},#{triptype},#{content},#{equipment},#{notice},#{summary},#{spot},#{cdate})
+  </insert>
+	<delete id="deleteNews">
+		DELETE FROM newstrategy WHERE id=#{id}
+	</delete>
+	<select id="getline" parameterType="int" resultType="com.etc.pojo.Newstrategypojo">
+		SELECT * FROM newstrategy WHERE id=#{id}
+	</select>
+	
+	<update id="updatenews" parameterType="com.etc.pojo.Newstrategypojo">
+	update newstrategy
+	set title=#{title},spot=#{spot},triptime=#{triptime},people=#{people},imgpath=#{imgpath},triptype=#{triptype},content=#{content},equipment=#{equipment},notice=#{notice},summary=#{summary} 
+	where id=#{id}
+	</update>
+	
+	
+  </mapper>

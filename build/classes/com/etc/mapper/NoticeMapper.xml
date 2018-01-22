@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.etc.dao.NoticeDao">
+  	<select id="getNotice" resultType="com.etc.pojo.Notice">
+  		SELECT notice.id,title,message,cdate,aid,admin_info.`name`
+		FROM notice,admin_info WHERE notice.aid=admin_info.id ORDER BY id desc limit 0,3;
+  	</select>
+  	<select id="getANotice" parameterType="int" resultType="com.etc.pojo.Notice">
+  		select notice.id,title,message,cdate,aid,admin_info.`name`
+  		from notice,admin_info WHERE notice.aid=admin_info.id and notice.id=#{id}
+  	</select>
+  	<select id="getALL" resultType="com.etc.pojo.Notice">
+  	select * from notice;
+  </select>
+  <select id="getAdminById" resultType="com.etc.pojo.Notice">
+  	select t2.name
+	from notice t1,admin_info t2
+	WHERE t1.aid=t2.id
+  </select>
+  <insert id="insertPojo" parameterType="com.etc.pojo.Notice" useGeneratedKeys="true" keyProperty="id">
+	  	insert into notice(title,message,cdate,aid)  values(#{title},#{message},#{cdate},#{aid})
+	  </insert>
+	  <select id="getAdminNotice" resultType="com.etc.pojo.Notice">
+	  SELECT t1.id,t1.title,t1.cdate,t2.name
+	  FROM notice t1,admin_info t2
+		where t1.aid=t2.id
+	</select>
+	<update id="updateNotice">
+		update notice set title=#{title},message=#{message} where id=#{id}
+	</update>
+	<delete id="deleteNotice" parameterType="int">
+		delete from notice where id=#{id} 
+	</delete>
+  </mapper>
